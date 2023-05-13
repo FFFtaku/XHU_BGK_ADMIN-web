@@ -1,5 +1,8 @@
-const BASE_URL = 'http://192.168.10.11:8080'
-const TIME_OUT = 10000
+const DEV_BASE_URL = 'http://192.168.0.104:8083'
+const SERVER_PATH = 'http://xiguapasstest.work/back'
+
+const BASE_URL = SERVER_PATH
+const TIME_OUT = 100000
 
 export {
   BASE_URL,

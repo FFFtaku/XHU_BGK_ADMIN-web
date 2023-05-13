@@ -4,11 +4,15 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 </script>
 
 <template>
-  <div>
+  <div class="app">
     <ElConfigProvider :locale="zhCn">
       <RouterView></RouterView>
     </ElConfigProvider>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.app{
+  min-width: 1280px;
+}
+</style>

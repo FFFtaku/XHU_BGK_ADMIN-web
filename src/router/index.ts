@@ -24,42 +24,46 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '',
-        name: 'accountCreate',
-        component: () => import('@views/Account/AccountCreate/index.vue')
-      }, {
-        path: '',
         name: 'accountInfo',
         component: () => import('@views/Account/AccountInfo/index.vue')
+      }, {
+        path: 'create',
+        name: 'accountCreate',
+        component: () => import('@views/Account/AccountCreate/index.vue')
       }
     ]
   }, {
-    path: '/dataDisplay',
+    path: '/setting',
     component: BaseLayout,
     children: [
       {
         path: '',
-        name: 'dataDisplay',
-        component: () => import('@views/DataDisplay/index.vue')
+        name: 'roleSetting',
+        component: () => import('@views/Setting/RoleSetting/index.vue')
+      },{
+        path: '',
+        name: 'privilegeSetting',
+        component: () => import('@views/Setting/PrivilegeSetting/index.vue')
       }
     ]
   }, {
-    path: '/image',
+    path: '/instituteInfo',
     component: BaseLayout,
     children: [
       {
         path: '',
-        name: 'image',
-        component: () => import('@views/Image/index.vue')
+        name: 'instituteInfo',
+        component: () => import('@views/InstituteInfo/index.vue')
       }
     ]
   }, {
-    path: '/pod',
+    path: '/resource',
     component: BaseLayout,
     children: [
       {
         path: '',
-        name: 'pod',
-        component: () => import('@views/Pod/index.vue')
+        name: 'resource',
+        component: () => import('@views/Resource/index.vue')
       }
     ]
   }, {
@@ -70,16 +74,6 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'upload',
         component: () => import('@views/Upload/index.vue')
-      }
-    ]
-  }, {
-    path: '/directory',
-    component: BaseLayout,
-    children: [
-      {
-        path: '',
-        name: 'directory',
-        component: () => import('@views/Directory/index.vue')
       }
     ]
   }

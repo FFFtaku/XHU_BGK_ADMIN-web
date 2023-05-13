@@ -4,6 +4,8 @@ import { BASE_URL, TIME_OUT } from '@sys-config/httpConfig'
 import type { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosRequestConfig, AxiosResponse } from 'axios'
 import type { ResponseResult } from './types'
 import { ElMessage } from 'element-plus'
+import { getToken, setToken } from '@utils/loginTools'
+import { backToEntryPage } from '@utils/routerTools'
 
 /**
  * 创建axios请求实例
@@ -16,8 +18,7 @@ const service: AxiosInstance = axios.create({
 
 /* ------------请求拦截器----------- */
 const requestInterceptor = (config: InternalAxiosRequestConfig) => {
-  // const token = sessionStorage.getItem("token")
-  // config.headers["token"] = token
+  config.headers["token"] = getToken()
   return config
 }
 
@@ -32,32 +33,44 @@ const requestInterceptorError = (error: AxiosError) => {
 
 /* ------------响应拦截器----------- */
 const responseInterceptor = (response: AxiosResponse<ResponseResult>) => {
+  // 如果不传入泛型的话data是any的
   const { code, message, data } = response.data
 
   // 后端返回值采用restful风格，非200状态码进入错误处理
   if (code === ResponseStatusEnum.SUCCESS) {
     if (data && data.token) {
-      sessionStorage.setItem("token", data.token)
+      setToken(data.token)
     }
 
     return Promise.resolve(data)
   } else {
-    // 对常见错误状态统一处理
-    // 一般来说，业务操作层面的错误即OPERATION_FAILURE抛出由具体业务代码处理，其余错误统一处理
-    if (code === ResponseStatusEnum.IDENTITY_FAILURE) {
-      // return router.replace("/");
-    }
-    if(code === ResponseStatusEnum.API_PARAMETER_ERROR){
-      // pass
-    }
-    if(code === ResponseStatusEnum.SERVER_ERROR){
-      // pass
+    // 对某些常见错误状态统一处理
+    if (code === ResponseStatusEnum.TOKEN_ERROR || code === ResponseStatusEnum.ACCOUNT_ILLEGAL) {
+      ElMessage({
+        type: 'error',
+        message: '身份错误'
+      })
+      backToEntryPage()
+    }else if(code === ResponseStatusEnum.API_PARAMETER_ERROR){
+      ElMessage({
+        type: 'error',
+        message: '接口参数错误'
+      })
+    }else if(code === ResponseStatusEnum.SERVER_ERROR){
+      ElMessage({
+        type: 'error',
+        message: '系统错误！'
+      })
+    }else{
+      ElMessage({
+        type: 'error',
+        message: message
+      })
     }
 
     // 如果不抛出reject将会默认走then
     return Promise.reject(message)
   }
-
 }
 
 const responseInterceptorError = (error: AxiosError) => {
@@ -66,13 +79,13 @@ const responseInterceptorError = (error: AxiosError) => {
   // 因为采用restful风格，一般不会返回非200以外的状态码
   // 因此通常在网络连接异常的情况下才会走这里（http超时，或tcp层都未能连接成功）
 
-  // 需要返回reject状态的promise才会走catch，如果直接返回则走then，如果不返回在回调中将不能拿到结果
   ElMessage({
     type: 'error',
     message: '网络故障，请检测网络状态',
   })
-  // return Promise.reject(error)
   console.log(error)
+  // 需要返回reject状态的promise才会走catch，如果直接返回则走then
+  return Promise.reject(error)
 }
 
 /* -------------------------------- */

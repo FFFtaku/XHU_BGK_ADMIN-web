@@ -22,6 +22,7 @@ const searchInput = ref(null)
   background-color: $second-bg-color;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid black;
 
   .global-search {
     height: 40px;

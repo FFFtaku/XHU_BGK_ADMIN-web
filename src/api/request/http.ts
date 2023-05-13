@@ -1,6 +1,6 @@
 import request from "./axios";
 import { RequestMethodEnum } from '@constant/httpConstant'
-import type { AxiosRequestConfig } from 'axios'
+import type { UploadConfig } from './types'
 
 const http = {
   get<T = any>(url: string, params?: object) {
@@ -19,8 +19,8 @@ const http = {
     return request<T>(url, RequestMethodEnum.DELETE, { data })
   },
 
-  request<T = any>(url: string, config?: AxiosRequestConfig) {
-    return request<T>(url, RequestMethodEnum.DELETE, config)
+  upload<T = any>(url: string, data: FormData, config?: UploadConfig) {
+    return request<T>(url, RequestMethodEnum.POST, { data, ...config })
   },
 }
 

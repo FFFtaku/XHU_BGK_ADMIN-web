@@ -1,24 +1,20 @@
 import http from './request/http'
 
 interface PostLogin {
-  Username: string,
-  Password: string
+  adminName: string,
+  adminPassword: string
 }
 function postLogin(argu: PostLogin) {
-  return http.post('/login', argu)
+  return http.post('/admin/login', argu)
 }
 
-interface PostRegister {
-  Username: string,
-  Password: string,
-  Role: string,
-  Path: string
-}
-function postRegister(argu: PostRegister) {
-  return http.post('/register', argu)
+
+type PostLogout = undefined
+function postLogout(argu: PostLogout) {
+  return http.post('/admin/logout', argu)
 }
 
 export {
   postLogin,
-  postRegister
+  postLogout
 }
